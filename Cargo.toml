@@ -2,7 +2,30 @@
 name = "rust-cli-example"
 version = "0.1.0"
 edition = "2021"
+# minimum version of rust that contains use sync::OnceLock
+rust-version = "1.70"
+description = "example command line application that demonstrates non-functional requirements"
+readme = "README.md"
+repository = "https://github.com/quagly/rust-cli-example"
+license = "Apache-2.0"
+keywords = ["cli", "example"]
+categories = ["command-line-utilities"]
+# do not accidently publish to a package registry like crates.io 
+publish = false
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+anyhow = "1.0"
+clap = { version = "4.4", features = ["derive"] }
+clap-verbosity-flag = "2.0"
+log = "0.4"
+log4rs = "1.2"
+serde = { version = "1.0", features = ["derive"] }
+serde_yaml = "0.9"
+
+
+[dev-dependencies]
+assert_cmd = "2.0"
+assert_fs = "1.0"
+predicates = "3.0"
