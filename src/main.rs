@@ -5,6 +5,7 @@ use log4rs;
 // this is just an example of how a module uses the log
 // initialized here
 use rust_cli_example::logmod;
+use rust_cli_example::config;
 
 // should this be a path instead of string slice?
 // lets make a config struct with defaults for bootstrap settings
@@ -25,6 +26,7 @@ fn main() -> Result<()> {
         info!("To test rolling file configurations we print this message in a loop. This is loop nr. {}", i);
     }
     logmod::run();
+    config::run();
     // demonstrate log_panics
     // panic!("very bad!");
     
