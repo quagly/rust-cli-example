@@ -6,8 +6,6 @@ use log4rs;
 // initialized here
 use rust_cli_example::logmod;
 
-// TODO log panics.  Probably use log_panics crate
-// https://docs.rs/log-panics/latest/log_panics/#structs
 // should this be a path instead of string slice?
 // lets make a config struct with defaults for bootstrap settings
 const LOGGING_CONFIG_FILE: &str = "logging-config.yml"; 
