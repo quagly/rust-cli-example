@@ -1,9 +1,17 @@
 // this just brings the log:: use into scope.  
 use super::*; 
+use std::any::type_name;
  
+// types are known at compile time so need a function to capture them at compile time
+fn type_of<T>(_: &T) -> &'static str {
+    type_name::<T>()
+}
+
 // configuration sufficient to get additional configuration from file
 // TODO - consider using Path instead of String for files
+// TODO - remove allow dead_code
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct Bootstrap {
     // need to initialize logging before reading global configuration
     // so that problems reading configuation can be logged
@@ -31,7 +39,15 @@ pub fn run() {
 mod tests {
     use super::*;
     use all_asserts::assert_false;
-    use predicates::prelude::*;
+    use static_assertions::assert_fields;
+
+    #[test]
+    // test that log bootstrap has all required fields 
+    // just an example of using assert_fields! macro.  
+    // unneccessary here as what feilds there are is not dynamic
+    fn default_config_fields() {
+        assert_fields!(Bootstrap: logging_configuration_filename,global_configuration_filename);
+    }
 
     #[test]
     // test that log config file name has a default set to something 
@@ -42,8 +58,13 @@ mod tests {
     }
 
     #[test]
+    // test that log config file name has a default set to something - same as above
+    // using predicate crate
+    // I think I would like predicates like this if I could reuse them.  But I do not see how.
     fn default_log_config_is_set() {
         let default_bootstrap: Bootstrap = Default::default(); 
+        // this predicate seems generally useful.  How to make it const or static?  Need to know
+        // the type.  Where is my print type function?
         let pred_string_not_set = predicate::str::is_empty().trim().name("trimmed_string_is_empty");
         assert_false!(pred_string_not_set.eval(&default_bootstrap.logging_configuration_filename));
     }

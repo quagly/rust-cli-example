@@ -22,6 +22,7 @@ clap-verbosity-flag = "2.0"
 log = "0.4"
 log4rs = "1.2"
 log-panics = { version = "2.1", features = ["with-backtrace"] }
+predicates = "3.0" 
 serde = { version = "1.0", features = ["derive"] }
 serde_yaml = "0.9"
 
@@ -33,4 +34,3 @@ all_asserts = "2.3" # additional assert macros.  I like assert_false!()
 assert_cmd = "2.0"  # for testing cli
 assert_fs = "1.0"   # create a manage files for tests
 static_assertions = "1.1.0" # ensure correct assumptions about constants and types
-predicates = "3.0" # Powerful.  Maybe too powerful.
