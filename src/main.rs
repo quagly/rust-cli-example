@@ -9,10 +9,13 @@ use rust_cli_example::config;
 
 // should this be a path instead of string slice?
 // lets make a config struct with defaults for bootstrap settings
-const LOGGING_CONFIG_FILE: &str = "logging-config.yml"; 
+// const LOGGING_CONFIG_FILE: &str = "logging-config.yml"; 
 
 fn main() -> Result<()> {
-    log4rs::init_file(LOGGING_CONFIG_FILE, Default::default()).unwrap();
+    // get bootstrap defaults to initialize logging and config
+    let default_bootstrap: config::Bootstrap = Default::default();
+    // log4rs::init_file(LOGGING_CONFIG_FILE, Default::default()).unwrap();
+    log4rs::init_file(default_bootstrap.logging_configuration_filename, Default::default()).unwrap();
     // backtrace mode options https://docs.rs/log-panics/latest/log_panics/enum.BacktraceMode.html#variants
     log_panics::Config::new()
         .backtrace_mode(log_panics::BacktraceMode::Resolved)

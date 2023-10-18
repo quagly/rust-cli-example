@@ -17,9 +17,9 @@ fn type_of<T>(_: &T) -> &'static str {
 pub struct Bootstrap {
     // need to initialize logging before reading global configuration
     // so that problems reading configuation can be logged
-    logging_configuration_filename: String,
+    pub logging_configuration_filename: String,
     // everything else should be in the config file
-    global_configuration_filename: String,
+    pub global_configuration_filename: String,
 }
 
 impl Default for Bootstrap {
