@@ -3,6 +3,8 @@ use super::*;
 use std::any::type_name;
  
 // types are known at compile time so need a function to capture them at compile time
+// TODO remove allow dead code
+#[allow(dead_code)]
 fn type_of<T>(_: &T) -> &'static str {
     type_name::<T>()
 }
@@ -44,7 +46,8 @@ mod tests {
     #[test]
     // test that log bootstrap has all required fields 
     // just an example of using assert_fields! macro.  
-    // unneccessary here as what feilds there are is not dynamic
+    // unneccessary here as what fields there are is not dynamic
+    // so the compiler will check them
     fn default_config_fields() {
         assert_fields!(Bootstrap: logging_configuration_filename,global_configuration_filename);
     }
@@ -63,9 +66,16 @@ mod tests {
     // I think I would like predicates like this if I could reuse them.  But I do not see how.
     fn default_log_config_is_set() {
         let default_bootstrap: Bootstrap = Default::default(); 
-        // this predicate seems generally useful.  How to make it const or static?  Need to know
-        // the type.  Where is my print type function?
+        // this predicate seems generally useful.  How to make it const or static?  
         let pred_string_not_set = predicate::str::is_empty().trim().name("trimmed_string_is_empty");
         assert_false!(pred_string_not_set.eval(&default_bootstrap.logging_configuration_filename));
+    }
+
+    #[test]
+    // test that global config file name has a default set to something 
+    fn default_global_config_is_set() {
+        let default_bootstrap: Bootstrap = Default::default(); 
+        let pred_string_not_set = predicate::str::is_empty().trim().name("trimmed_string_is_empty");
+        assert_false!(pred_string_not_set.eval(&default_bootstrap.global_configuration_filename));
     }
 }
