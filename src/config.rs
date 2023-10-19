@@ -1,11 +1,12 @@
 // this just brings the log:: use into scope.  
 use super::*; 
 use std::any::type_name;
- 
+
 // types are known at compile time so need a function to capture them at compile time
 // TODO remove allow dead code
+// TODO move this to a utility module
 #[allow(dead_code)]
-fn type_of<T>(_: &T) -> &'static str {
+pub fn type_of<T>(_: &T) -> &'static str {
     type_name::<T>()
 }
 
@@ -29,6 +30,20 @@ impl Default for Bootstrap {
             global_configuration_filename: String::from("config.yml")
         }
     }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Config {
+    pub update_frequency_sec: u32,
+    pub num_threads: u32,
+    pub data_sources: Vec<DataSource>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct DataSource {
+    pub name: String,
+    pub url: String,
+    pub source_type: String,
 }
 
 

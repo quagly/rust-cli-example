@@ -1,15 +1,11 @@
 use anyhow::{Context, Result};
-use log::{debug, error, info, trace, warn};
-use log_panics;
 use log4rs;
-// this is just an example of how a module uses the log
-// initialized here
-use rust_cli_example::logmod;
-use rust_cli_example::config;
+use log_panics;
+use rust_cli_example::*;
 
-// should this be a path instead of string slice?
-// lets make a config struct with defaults for bootstrap settings
-// const LOGGING_CONFIG_FILE: &str = "logging-config.yml"; 
+static CONFIG: OnceLock<config::Config> = OnceLock::new();
+
+// TODO config from yaml file function
 
 fn main() -> Result<()> {
     // get bootstrap defaults to initialize logging and config
@@ -20,6 +16,7 @@ fn main() -> Result<()> {
     log_panics::Config::new()
         .backtrace_mode(log_panics::BacktraceMode::Resolved)
         .install_panic_hook();
+    // try out logging
     trace!("detailed tracing info");
     debug!("debug info");
     info!("relevant general info");
@@ -33,5 +30,20 @@ fn main() -> Result<()> {
     // demonstrate log_panics
     // panic!("very bad!");
     
+    // initialize config from yaml
+    let config_file = std::fs::File::open(&default_bootstrap.global_configuration_filename)
+        .with_context(|| format!("Failed to read file from {}", default_bootstrap.global_configuration_filename))?;
+    info!("config_file type is: {}", config::type_of(&config_file));
+    let config_from_file: config::Config = serde_yaml::from_reader(config_file)
+        .with_context(|| format!("Failed to initialize Config"))?;
+    info!("config from file is: {:?}", config_from_file);
+
+    let initialize_config_result = CONFIG.set(config_from_file);
+    assert!(initialize_config_result.is_ok());
+
+    // use CONFIG
+    info!("update_frequency_sec is: {}", CONFIG.get().unwrap().update_frequency_sec);
+    info!("OnceLock CONFIG is: {:#?}", CONFIG);
+
     Ok(())
 }
